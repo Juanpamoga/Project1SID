@@ -50,7 +50,7 @@ public class FB_ScoreController : MonoBehaviour
 
                     var data = (Dictionary<string, object>)snapshot.Value;
 
-                    Debug.Log("Puntaje: " +data["score"]);
+                    Debug.Log("Puntaje: " + data["score"]);
 
                     //foreach (var userDoc in (Dictionary<string,object>)snapshot.Value)
                     //{
@@ -71,6 +71,12 @@ public class FB_ScoreController : MonoBehaviour
 
 public class UserData
 {
-   public int score;
+    public int score;
     public string username;
+    public string email;
+}
+
+public class Users
+{
+    public UserData usuario;
 }

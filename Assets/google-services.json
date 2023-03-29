@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "49835648701",
+    "project_id": "project1sid",
+    "storage_bucket": "project1sid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:49835648701:android:6e21de7ae575b1931b39d4",
+        "android_client_info": {
+          "package_name": "com.grupo4.flappyMatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "49835648701-qif013b0d0btugimso21f5a6p7n18002.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDjFeNB0PMXvYy4F49t55MpbF4pefnixo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "49835648701-qif013b0d0btugimso21f5a6p7n18002.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

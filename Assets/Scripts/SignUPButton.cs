@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Database;
+using Firebase;
+using TMPro;
 
 namespace firebaseTest
 {
@@ -30,8 +32,8 @@ namespace firebaseTest
 
         private void HandleRegistrationButtonClicked()
         {
-            string email = GameObject.Find("InputEmail").GetComponent<InputField>().text;
-            string password = GameObject.Find("InputPassword").GetComponent<InputField>().text;
+            string email = GameObject.Find("EmailInput").GetComponent<TMP_InputField>().text;
+            string password = GameObject.Find("PasswordInput").GetComponent<TMP_InputField>().text;
 
             _registrationCoroutine = StartCoroutine(RegisterUser(email, password));
         }
@@ -52,10 +54,10 @@ namespace firebaseTest
             {
                 Debug.Log($"Succesfully registered user {registerTask.Result.Email}");
 
-
+                FirebaseApp.DefaultInstance.SetDatabaseUrl("https://<your-project-name>.firebaseio.com/");
                 UserData data = new UserData();
 
-                data.username = GameObject.Find("InputUsername").GetComponent<InputField>().text;
+                data.email = GameObject.Find("EmailInput").GetComponent<TMP_InputField>().text;
                 string json = JsonUtility.ToJson(data);
 
                 FirebaseDatabase.DefaultInstance.RootReference.Child("users").Child(registerTask.Result.UserId).SetRawJsonValueAsync(json);
