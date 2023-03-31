@@ -54,7 +54,7 @@ namespace firebaseTest
             {
                 Debug.Log($"Succesfully registered user {registerTask.Result.Email}");
 
-                FirebaseApp.DefaultInstance.SetDatabaseUrl("https://<your-project-name>.firebaseio.com/");
+                //FirebaseApp.DefaultInstance.SetDatabaseUrl("https://<your-project-name>.firebaseio.com/");
                 UserData data = new UserData();
 
                 data.email = GameObject.Find("EmailInput").GetComponent<TMP_InputField>().text;
