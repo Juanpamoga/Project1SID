@@ -7,7 +7,7 @@ public class Canvas_Manager : MonoBehaviour
 {
     public GameObject registerCanvas;
     public GameObject loginCanvas;
-    public GameObject matchmakingCanvas;
+    public GameObject onlineCanvas;
 
 
     // Start is called before the first frame update
@@ -20,13 +20,19 @@ public class Canvas_Manager : MonoBehaviour
     public void LoginSuccesful()
     {
         loginCanvas.SetActive(false);
-        matchmakingCanvas.SetActive(true);
+        onlineCanvas.SetActive(true);
     }
 
     public void Registration()
     {
         loginCanvas.SetActive(false);
         registerCanvas.SetActive(true);
+    }
+
+    public void GoBackToLogin()
+    {
+        loginCanvas.SetActive(true);
+        registerCanvas.SetActive(false);
     }
 
 }

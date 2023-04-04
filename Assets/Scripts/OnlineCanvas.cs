@@ -12,31 +12,47 @@ using UnityEngine.UI;
 
 public class OnlineCanvas : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI _userListText;
+    public TMP_Text userListText;
+    public DatabaseReference databaseReference;
+    public GameObject addFriendButtonPrefab; // reference to the AddFriend_Button prefab
+    public Transform buttonsContainer; // reference to the container that will hold the buttons
+    public float buttonSpacing = 5f; // spacing between each button in the list
+    private const float buttonHeight = 50f;
+    private float buttonPadding = 10f;
 
-    private void Start()
+
+
+    void Start()
     {
-
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         ShowUserList();
     }
 
-    private async void ShowUserList()
+    public async void ShowUserList()
     {
+        userListText.text = "Loading users...";
 
-        DatabaseReference databaseRef = FirebaseDatabase.DefaultInstance.RootReference;
+        // Obtiene la lista de usuarios de Realtime Database
+        var dataSnapshot = await databaseReference.Child("users").GetValueAsync();
 
-        // Retrieve the user list from the "users" node
-        DataSnapshot snapshot = await databaseRef.Child("users").GetValueAsync();
-        Dictionary<string, object> users = (Dictionary<string, object>)snapshot.Value;
-
-        // Display the list of user emails in the onlineCanvas
-        string userList = "";
-        foreach (KeyValuePair<string, object> user in users)
+        // Loop para la lista de usuarios y obtiene su 'email'
+        var users = new List<string>();
+        foreach (var userSnapshot in dataSnapshot.Children)
         {
-            string email = (string)user.Value;
-            userList += "- " + email + "\n";
+            var email = userSnapshot.Child("email").GetValue(true).ToString();
+            users.Add(email);
         }
-        _userListText.text = userList;
+
+        // Instancia un botón para cada usuario
+        for (int i = 0; i < users.Count; i++)
+        {
+            var button = Instantiate(addFriendButtonPrefab, buttonsContainer.transform);
+            // Setea la posición del botón en base al índice de usuario
+            var buttonTransform = button.GetComponent<RectTransform>();
+            buttonTransform.anchoredPosition = new Vector2(0, -buttonHeight * buttonSpacing * i - buttonPadding * i);
+        }
+
+        // Actualiza la lista de texto 
+        userListText.text = string.Join("\n", users);
     }
 }
