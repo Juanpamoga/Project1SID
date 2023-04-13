@@ -12,8 +12,8 @@ public class NotificationsButton : MonoBehaviour
         canvas_Manager = FindObjectOfType<Canvas_Manager>();
     }
 
-    //public void ContinueToNotifications()
-    //{
-    //    canvas_Manager.ShowNotifications();
-    //}
+    public void ContinueToNotifications()
+    {
+        canvas_Manager.ShowNotifications();
+    }
 }

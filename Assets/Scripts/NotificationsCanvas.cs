@@ -1,65 +1,62 @@
-using Firebase.Auth;
-using Firebase.Database;
-using Firebase;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
+using Firebase;
+using Firebase.Database;
+using Firebase.Auth;
 
 public class NotificationsCanvas : MonoBehaviour
 {
-    public OnlineCanvas onlineCanvas; // referencia al objeto OnlineCanvas
-    private const string notificationsNode = "notifications";
+    private DatabaseReference databaseReference;
+    private FirebaseAuth auth;
 
-    void Start()
+    public TextMeshProUGUI notifications;
+
+    private void Start()
     {
-        // escucha los cambios en la base de datos de Firebase
-        FirebaseDatabase.DefaultInstance
-            .GetReference(notificationsNode)
-            .Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId)
-            .ValueChanged += HandleNotificationsValueChanged;
+        // Obtener una instancia de FirebaseAuth.
+        auth = FirebaseAuth.DefaultInstance;
+
+        // Obtener la referencia de la base de datos.
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
+        // Escuchar los cambios en el nodo de las solicitudes de amistad.
+        databaseReference.Child("friendRequests").ValueChanged += HandleFriendRequestValueChanged;
     }
 
-    // método para mostrar las notificaciones
-    public void MostrarNotificaciones()
+    private void HandleFriendRequestValueChanged(object sender, ValueChangedEventArgs e)
     {
-        // recupera la lista de notificaciones pendientes del usuario actual
-        FirebaseDatabase.DefaultInstance
-            .GetReference(notificationsNode)
-            .Child(FirebaseAuth.DefaultInstance.CurrentUser.UserId)
-            .GetValueAsync().ContinueWith(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("Error al obtener las notificaciones: " + task.Exception);
-                }
-                else if (task.IsCompleted)
-                {
-                    var snapshot = task.Result;
-                    if (snapshot.Exists)
-                    {
-                        // muestra un mensaje en la consola para cada notificación pendiente
-                        foreach (var notificationSnapshot in snapshot.Children)
-                        {
-                            var senderEmail = notificationSnapshot.Child("senderEmail").Value.ToString();
-                            Debug.Log("Tienes una solicitud de amistad pendiente de: " + senderEmail);
-                        }
-                    }
-                }
-            });
-    }
-
-    // método que se llama cuando cambia el valor de las notificaciones en la base de datos
-    private void HandleNotificationsValueChanged(object sender, ValueChangedEventArgs args)
-    {
-        if (args.DatabaseError != null)
+        if (e.DatabaseError != null)
         {
-            Debug.LogError("Error al obtener las notificaciones: " + args.DatabaseError.Message);
+            Debug.LogError("Error al leer las solicitudes de amistad: " + e.DatabaseError.Message);
             return;
         }
 
-        // actualiza las notificaciones cuando cambian
-        MostrarNotificaciones();
+        if (auth.CurrentUser != null)
+        {
+            // Obtener el ID del usuario autenticado.
+            string userId = auth.CurrentUser.UserId;
+
+            // Obtener la lista de solicitudes de amistad para el usuario actual.
+            DataSnapshot snapshot = e.Snapshot;
+            if (snapshot.HasChild(userId))
+            {
+                // Obtener el número de solicitudes de amistad pendientes.
+                int friendRequestsCount = (int)snapshot.Child(userId).ChildrenCount;
+
+                // Actualizar el objeto de texto con las notificaciones.
+                string notificationText = "Tienes " + friendRequestsCount + " solicitudes de amistad pendientes:\n";
+                foreach (DataSnapshot friendRequestSnapshot in snapshot.Child(userId).Children)
+                {
+                    string senderEmail = friendRequestSnapshot.Child("from").GetValue(true).ToString();
+                    notificationText += "- " + senderEmail + " te ha enviado una solicitud de amistad\n";
+                }
+                notifications.text = notificationText;
+            }
+            else
+            {
+                // No hay solicitudes de amistad pendientes para este usuario.
+                notifications.text = "No tienes solicitudes de amistad pendientes.";
+            }
+        }
     }
 }

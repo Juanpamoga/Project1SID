@@ -8,6 +8,7 @@ public class Canvas_Manager : MonoBehaviour
     public GameObject registerCanvas;
     public GameObject loginCanvas;
     public GameObject onlineCanvas;
+    public GameObject notificationsCanvas;
 
 
 
@@ -36,11 +37,10 @@ public class Canvas_Manager : MonoBehaviour
         registerCanvas.SetActive(false);
     }
 
-    //public void ShowNotifications() 
-    //{
-    //    notificationsCanvasObject.SetActive(true);
-    //    onlineCanvas.SetActive(false);
-    //    notificationsCanvas.MostrarNotificaciones();
-    //}
+    public void ShowNotifications()
+    {
+        notificationsCanvas.SetActive(true);
+        onlineCanvas.SetActive(false);
+    }
 
 }
