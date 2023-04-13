@@ -10,6 +10,7 @@ public class Canvas_Manager : MonoBehaviour
     public GameObject onlineCanvas;
 
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,5 +35,12 @@ public class Canvas_Manager : MonoBehaviour
         loginCanvas.SetActive(true);
         registerCanvas.SetActive(false);
     }
+
+    //public void ShowNotifications() 
+    //{
+    //    notificationsCanvasObject.SetActive(true);
+    //    onlineCanvas.SetActive(false);
+    //    notificationsCanvas.MostrarNotificaciones();
+    //}
 
 }
