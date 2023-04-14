@@ -43,4 +43,10 @@ public class Canvas_Manager : MonoBehaviour
         onlineCanvas.SetActive(false);
     }
 
+    public void ShowOnlineCanvas()
+    {
+        onlineCanvas.SetActive(true);
+        notificationsCanvas.SetActive(false);
+       
+    }
 }

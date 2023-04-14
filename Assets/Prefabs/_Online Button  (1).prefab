@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3123809974937099998}
   - component: {fileID: 7036906219440768473}
   - component: {fileID: 2027938482129327738}
-  - component: {fileID: 3803262807072801747}
+  - component: {fileID: 5785675379808238797}
   m_Layer: 5
   m_Name: _Online Button  (1)
   m_TagString: Untagged
@@ -123,9 +123,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3803262807072801747}
-        m_TargetAssemblyTypeName: NotificationsButton, Assembly-CSharp
-        m_MethodName: ContinueToNotifications
+      - m_Target: {fileID: 5785675379808238797}
+        m_TargetAssemblyTypeName: OnlineButton, Assembly-CSharp
+        m_MethodName: ContinueToOnline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3803262807072801747
+--- !u!114 &5785675379808238797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 768438233665600815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5993c22638f0924291486e4532a8308, type: 3}
+  m_Script: {fileID: 11500000, guid: b1cd9f2fd6bdc8946acca9a1d82591fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas_Manager: {fileID: 0}
