@@ -12,22 +12,30 @@ using UnityEngine.UI;
 public class OnlineCanvas : MonoBehaviour
 {
     public TMP_Text userListText;
+    public TMP_Text onlineUserListText;
     public DatabaseReference databaseReference;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
 
     void Start()
     {
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+        auth = FirebaseAuth.DefaultInstance;
+        user = auth.CurrentUser;
+        if (user != null)
+        {
+            AddUserToOnlineList(user.Email);
+        }
         ShowUserList();
+        ShowOnlineUserList();
     }
 
     public async void ShowUserList()
     {
         userListText.text = "Loading users...";
 
-        // Obtiene la lista de usuarios de Realtime Database
         var dataSnapshot = await databaseReference.Child("users").GetValueAsync();
 
-        // Loop para la lista de usuarios y obtiene su 'email'
         var users = new List<string>();
         foreach (var userSnapshot in dataSnapshot.Children)
         {
@@ -35,7 +43,41 @@ public class OnlineCanvas : MonoBehaviour
             users.Add(email);
         }
 
-        // Actualiza la lista de texto 
         userListText.text = string.Join("\n", users);
+    }
+
+    private void AddUserToOnlineList(string email)
+    {
+        databaseReference.Child("Online Users").Child(auth.CurrentUser.UserId).SetValueAsync(email);
+    }
+
+    private void RemoveUserFromOnlineList()
+    {
+        databaseReference.Child("Online Users").Child(auth.CurrentUser.UserId).RemoveValueAsync();
+    }
+
+    public void ShowOnlineUserList()
+    {
+        databaseReference.Child("Online Users").ValueChanged += HandleOnlineUserListChanged;
+    }
+
+    private void HandleOnlineUserListChanged(object sender, ValueChangedEventArgs args)
+    {
+        var users = new List<string>();
+        foreach (var userSnapshot in args.Snapshot.Children)
+        {
+            var email = userSnapshot.GetValue(true).ToString();
+            users.Add(email);
+        }
+
+        onlineUserListText.text = string.Join("\n", users);
+    }
+
+    void OnDestroy()
+    {
+        if (user != null)
+        {
+            RemoveUserFromOnlineList();
+        }
     }
 }
